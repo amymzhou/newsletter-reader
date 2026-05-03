@@ -22,12 +22,28 @@ const parser = new Parser({
 });
 
 const SANITIZE_OPTIONS: sanitizeHtml.IOptions = {
-  allowedTags: sanitizeHtml.defaults.allowedTags.concat(["img", "figure", "figcaption"]),
+  allowedTags: [
+    ...sanitizeHtml.defaults.allowedTags,
+    "img", "picture", "source", "figure", "figcaption",
+    "video", "audio", "details", "summary",
+    "h1", "h2", "h3", "h4", "h5", "h6",
+    "div", "span", "section", "article", "aside", "header", "footer",
+    "iframe",
+  ],
   allowedAttributes: {
-    ...sanitizeHtml.defaults.allowedAttributes,
-    img: ["src", "alt", "width", "height"],
+    "*": ["class", "style"],
+    img: ["src", "srcset", "alt", "width", "height", "loading"],
+    source: ["src", "srcset", "type", "media", "sizes"],
+    picture: [],
+    video: ["src", "controls", "poster", "width", "height"],
+    audio: ["src", "controls"],
     a: ["href", "target", "rel"],
+    iframe: ["src", "width", "height", "allowfullscreen", "frameborder", "allow"],
+    figure: ["class"],
+    div: ["class", "style"],
+    span: ["class", "style"],
   },
+  allowedIframeHostnames: ["www.youtube.com", "youtube.com", "youtu.be", "open.spotify.com", "player.vimeo.com"],
   transformTags: {
     a: (tagName, attribs) => ({
       tagName,

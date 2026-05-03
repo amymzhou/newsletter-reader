@@ -3,6 +3,7 @@ import Link from "next/link";
 import { fetchAllPosts } from "@/lib/feeds";
 import { Reader } from "@/components/Reader";
 import { MarkRead } from "@/components/ReadTracker";
+import { ReviewPanel } from "@/components/ReviewPanel";
 import { formatDate } from "@/lib/utils";
 
 export const revalidate = 3600;
@@ -58,6 +59,26 @@ export default async function PostPage({ params }: { params: Promise<{ slug: str
       </div>
 
       <Reader content={post.content} />
+
+      {post.content.length < 500 && (
+        <div
+          className="mt-6 px-4 py-3 rounded-lg text-sm"
+          style={{ backgroundColor: "var(--border)", color: "var(--text-muted)" }}
+        >
+          This post may be behind a paywall — only a preview is available in the RSS feed.{" "}
+          <a
+            href={post.link}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="underline"
+            style={{ color: "var(--text)" }}
+          >
+            Read the full post →
+          </a>
+        </div>
+      )}
+
+      <ReviewPanel slug={post.slug} accentColor={post.accentColor} />
 
       <footer className="mt-12 pt-6 border-t flex items-center justify-between" style={{ borderColor: "var(--border)" }}>
         <Link
